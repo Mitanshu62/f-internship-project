@@ -1,0 +1,12 @@
+<%- include('../partials/header') %>
+
+<div class="error-container">
+  <div class="error-card glass-card">
+    <h1 class="error-code">500</h1>
+    <h2>Internal Server Error</h2>
+    <p><%= typeof error !== 'undefined' ? error : 'Something went wrong on our end.' %></p>
+    <a href="/" class="btn-primary">Go to Home</a>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,29 @@
+<%- include('../partials/header') %>
+
+<div class="form-container">
+  <div class="form-card glass-card">
+    <div class="form-header">
+      <h2>Daily Goal Settings</h2>
+      <a href="/dashboard" class="btn-text">Back to Dashboard</a>
+    </div>
+    
+    <div class="goal-info mb-4 text-center">
+      <div class="stat-icon streak-icon mx-auto mb-2">🎯</div>
+      <p class="text-muted">Set a realistic daily goal to maintain your coding habit. Consistency is key!</p>
+    </div>
+
+    <form action="/goal" method="POST">
+      <div class="form-group text-center">
+        <label for="dailyGoal" style="font-size: 1.2rem; margin-bottom: 1rem;">How many problems do you want to solve daily?</label>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem;">
+          <input type="number" id="dailyGoal" name="dailyGoal" class="form-control" style="width: 120px; font-size: 1.5rem; text-align: center;" min="1" max="50" required value="<%= user.dailyGoal %>">
+          <span style="font-size: 1.2rem; font-weight: 600; color: var(--text-muted);">Problems</span>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn-primary btn-block btn-lg mt-4">Save Goal</button>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

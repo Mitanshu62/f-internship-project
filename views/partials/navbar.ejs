@@ -1,0 +1,35 @@
+<nav class="navbar <%= user ? 'navbar-private' : 'navbar-public' %>">
+  <div class="nav-container">
+    <% if (!user) { %>
+      <a href="/" class="nav-logo">
+        <svg class="logo-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter">
+          <polyline points="30,40 10,55 30,70" />
+          <polyline points="40,80 55,40 70,55 90,25" />
+          <polygon points="75,20 95,20 95,40" fill="currentColor" stroke="none" />
+          <polyline points="60,55 80,70 60,85" />
+        </svg> CodeTrack
+      </a>
+      <ul class="nav-links">
+        <li><a href="/" class="btn-text">Home</a></li>
+        <li><a href="/auth/login" class="btn-text">Log In</a></li>
+        <li><a href="/auth/signup" class="btn-primary">Sign Up</a></li>
+      </ul>
+    <% } else { %>
+      <div class="nav-search-bar hidden-mobile">
+        <form action="/problems" method="GET" class="search-form">
+          <input type="text" name="search" placeholder="Search problems..." class="search-input">
+          <button type="submit" class="search-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </button>
+        </form>
+      </div>
+      <div class="nav-profile">
+        <span class="greeting">Hello, <%= user.username %></span>
+        <div class="avatar-sm"><%= user.username.charAt(0).toUpperCase() %></div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    <% } %>
+  </div>
+</nav>

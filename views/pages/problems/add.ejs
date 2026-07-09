@@ -1,0 +1,94 @@
+<%- include('../../partials/header') %>
+
+<div class="form-container">
+  <div class="form-card glass-card">
+    <div class="form-header">
+      <h2>Add New Problem</h2>
+      <a href="/problems" class="btn-text">Cancel</a>
+    </div>
+    
+    <form action="/problems" method="POST">
+      <div class="form-group">
+        <label for="title">Problem Title *</label>
+        <input type="text" id="title" name="title" class="form-control" required placeholder="e.g. Two Sum">
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group w-50">
+          <label for="platform">Platform *</label>
+          <select id="platform" name="platform" class="form-control" required>
+            <option value="">Select Platform</option>
+            <option value="LeetCode">LeetCode</option>
+            <option value="GeeksforGeeks">GeeksforGeeks</option>
+            <option value="Codeforces">Codeforces</option>
+            <option value="CodeChef">CodeChef</option>
+            <option value="HackerRank">HackerRank</option>
+            <option value="AtCoder">AtCoder</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        
+        <div class="form-group w-50">
+          <label for="difficulty">Difficulty *</label>
+          <select id="difficulty" name="difficulty" class="form-control" required>
+            <option value="">Select Difficulty</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group w-50">
+          <label for="topic">Topic *</label>
+          <select id="topic" name="topic" class="form-control" required>
+            <option value="">Select Topic</option>
+            <option value="Array">Array</option>
+            <option value="String">String</option>
+            <option value="Linked List">Linked List</option>
+            <option value="Stack">Stack</option>
+            <option value="Queue">Queue</option>
+            <option value="Tree">Tree</option>
+            <option value="Graph">Graph</option>
+            <option value="DP">DP</option>
+            <option value="Greedy">Greedy</option>
+            <option value="Binary Search">Binary Search</option>
+            <option value="Math">Math</option>
+            <option value="Other">Other...</option>
+          </select>
+        </div>
+        
+        <div class="form-group w-50">
+          <label for="status">Status *</label>
+          <select id="status" name="status" class="form-control" required>
+            <option value="Solved" selected>Solved</option>
+            <option value="Attempted">Attempted</option>
+            <option value="Revisit">Needs Revisit</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group w-50">
+          <label for="timeTaken">Time Taken (minutes)</label>
+          <input type="number" id="timeTaken" name="timeTaken" class="form-control" min="0" placeholder="e.g. 30">
+        </div>
+        
+        <div class="form-group w-50">
+          <label for="dateSolved">Date Solved</label>
+          <input type="date" id="dateSolved" name="dateSolved" class="form-control" value="<%= new Date().toISOString().split('T')[0] %>">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="notes">Personal Notes</label>
+        <textarea id="notes" name="notes" class="form-control" rows="4" placeholder="Approaches tried, time complexity, intuitions..."></textarea>
+      </div>
+      
+      <button type="submit" class="btn-primary btn-block">Save Problem</button>
+    </form>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>

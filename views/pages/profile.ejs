@@ -1,0 +1,48 @@
+<%- include('../partials/header') %>
+
+<div class="profile-container">
+  <div class="profile-card glass-card">
+    <div class="profile-header text-center">
+      <div class="avatar-lg mx-auto"><%= user.username.charAt(0).toUpperCase() %></div>
+      <h2><%= user.username %></h2>
+      <p class="text-muted"><%= user.email %></p>
+      <p class="join-date">Member since <%= new Date(user.joinedDate).toLocaleDateString(undefined, { month: 'long', year: 'numeric' }) %></p>
+    </div>
+    
+    <div class="profile-stats mt-4">
+      <div class="profile-stat-box">
+        <h4><%= totalProblems %></h4>
+        <p>Total Solved</p>
+      </div>
+      <div class="profile-stat-box">
+        <h4><%= user.currentStreak %> <span style="font-size: 0.9rem;">days</span></h4>
+        <p>Current Streak</p>
+      </div>
+      <div class="profile-stat-box">
+        <h4><%= user.longestStreak %> <span style="font-size: 0.9rem;">days</span></h4>
+        <p>Longest Streak</p>
+      </div>
+    </div>
+
+    <div class="profile-stats mt-4" style="background: white; border: 1px solid var(--border-color);">
+      <div class="profile-stat-box">
+        <h4><%= user.dailyGoal %></h4>
+        <p>Daily Goal</p>
+      </div>
+      <div class="profile-stat-box">
+        <h4><%= progressPercentage %>%</h4>
+        <p>Today's Progress</p>
+      </div>
+      <div class="profile-stat-box">
+        <h4><%= user.totalGoalsAchieved %></h4>
+        <p>Goals Achieved</p>
+      </div>
+    </div>
+    
+    <div class="profile-actions mt-4 text-center">
+      <a href="/auth/logout" class="btn-danger">Log Out</a>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

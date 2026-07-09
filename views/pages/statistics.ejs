@@ -1,0 +1,129 @@
+<%- include('../partials/header') %>
+
+<div class="dashboard-header">
+  <div>
+    <h1 class="page-title">Statistics</h1>
+    <p class="text-muted">Analyze your coding performance</p>
+  </div>
+</div>
+
+<div class="stats-overview-grid">
+  <div class="stat-card glass-card">
+    <div class="stat-info">
+      <h3 class="stat-value"><%= stats.totalProblems %></h3>
+      <p class="stat-label">Total Problems</p>
+    </div>
+  </div>
+  <div class="stat-card glass-card">
+    <div class="stat-info">
+      <h3 class="stat-value"><%= stats.solvedThisMonth %></h3>
+      <p class="stat-label">Solved This Month</p>
+    </div>
+  </div>
+  <div class="stat-card glass-card">
+    <div class="stat-info">
+      <h3 class="stat-value"><%= stats.averageTime %> <span style="font-size: 1rem; color: #64748B;">min</span></h3>
+      <p class="stat-label">Avg. Time Taken</p>
+    </div>
+  </div>
+  <div class="stat-card glass-card">
+    <div class="stat-info">
+      <h3 class="stat-value"><%= user.longestStreak %> <span style="font-size: 1rem; color: #64748B;">days</span></h3>
+      <p class="stat-label">Longest Streak</p>
+    </div>
+  </div>
+</div>
+
+<div class="charts-grid mt-4">
+  <!-- Difficulty Distribution -->
+  <div class="chart-card glass-card">
+    <h3>Difficulty Distribution</h3>
+    <% const maxDifficulty = Math.max(stats.easy, stats.medium, stats.hard, 1); %>
+    
+    <div class="progress-container mt-3">
+      <div class="progress-label">
+        <span>Easy (<%= stats.easy %>)</span>
+        <span><%= stats.totalProblems ? Math.round((stats.easy / stats.totalProblems) * 100) : 0 %>%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar fill-easy" style="width: <%= (stats.easy / maxDifficulty) * 100 %>%;"></div>
+      </div>
+    </div>
+    
+    <div class="progress-container mt-3">
+      <div class="progress-label">
+        <span>Medium (<%= stats.medium %>)</span>
+        <span><%= stats.totalProblems ? Math.round((stats.medium / stats.totalProblems) * 100) : 0 %>%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar fill-medium" style="width: <%= (stats.medium / maxDifficulty) * 100 %>%;"></div>
+      </div>
+    </div>
+    
+    <div class="progress-container mt-3">
+      <div class="progress-label">
+        <span>Hard (<%= stats.hard %>)</span>
+        <span><%= stats.totalProblems ? Math.round((stats.hard / stats.totalProblems) * 100) : 0 %>%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar fill-hard" style="width: <%= (stats.hard / maxDifficulty) * 100 %>%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Platform Distribution -->
+  <div class="chart-card glass-card">
+    <h3>Platform Distribution</h3>
+    <% const platforms = Object.keys(stats.platformDist); %>
+    <% if (platforms.length > 0) { %>
+      <% const maxPlatform = Math.max(...Object.values(stats.platformDist)); %>
+      <div class="platform-bars mt-3">
+        <% platforms.forEach(plat => { %>
+          <div class="progress-container mb-2">
+            <div class="progress-label">
+              <span><%= plat %></span>
+              <span><%= stats.platformDist[plat] %></span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar fill-primary" style="width: <%= (stats.platformDist[plat] / maxPlatform) * 100 %>%;"></div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p class="text-muted mt-3">No data available.</p>
+    <% } %>
+  </div>
+</div>
+
+<div class="charts-grid mt-4">
+  <!-- Topic Distribution -->
+  <div class="chart-card glass-card" style="grid-column: 1 / -1;">
+    <h3>Topic Distribution (Top 10)</h3>
+    <% 
+      const topics = Object.keys(stats.topicDist)
+        .sort((a, b) => stats.topicDist[b] - stats.topicDist[a])
+        .slice(0, 10); 
+    %>
+    <% if (topics.length > 0) { %>
+      <% const maxTopic = Math.max(...Object.values(stats.topicDist)); %>
+      <div class="topic-grid mt-3">
+        <% topics.forEach(t => { %>
+          <div class="topic-stat-item">
+            <div class="progress-label">
+              <span class="topic-name"><%= t %></span>
+              <span class="topic-count"><%= stats.topicDist[t] %></span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar fill-accent" style="width: <%= (stats.topicDist[t] / maxTopic) * 100 %>%;"></div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p class="text-muted mt-3">No data available.</p>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

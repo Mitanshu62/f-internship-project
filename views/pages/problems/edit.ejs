@@ -1,0 +1,81 @@
+<%- include('../../partials/header') %>
+
+<div class="form-container">
+  <div class="form-card glass-card">
+    <div class="form-header">
+      <h2>Edit Problem</h2>
+      <a href="/problems/<%= problem._id %>" class="btn-text">Cancel</a>
+    </div>
+    
+    <form action="/problems/<%= problem._id %>?_method=PUT" method="POST">
+      <div class="form-group">
+        <label for="title">Problem Title *</label>
+        <input type="text" id="title" name="title" class="form-control" required value="<%= problem.title %>">
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group w-50">
+          <label for="platform">Platform *</label>
+          <select id="platform" name="platform" class="form-control" required>
+            <% const platforms = ['LeetCode', 'GeeksforGeeks', 'Codeforces', 'CodeChef', 'HackerRank', 'AtCoder', 'Other']; %>
+            <% platforms.forEach(plat => { %>
+              <option value="<%= plat %>" <%= problem.platform === plat ? 'selected' : '' %>><%= plat %></option>
+            <% }) %>
+          </select>
+        </div>
+        
+        <div class="form-group w-50">
+          <label for="difficulty">Difficulty *</label>
+          <select id="difficulty" name="difficulty" class="form-control" required>
+            <% const difficulties = ['Easy', 'Medium', 'Hard']; %>
+            <% difficulties.forEach(diff => { %>
+              <option value="<%= diff %>" <%= problem.difficulty === diff ? 'selected' : '' %>><%= diff %></option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group w-50">
+          <label for="topic">Topic *</label>
+          <select id="topic" name="topic" class="form-control" required>
+            <% const topics = ['Array', 'String', 'Linked List', 'Stack', 'Queue', 'Tree', 'Graph', 'Heap', 'Trie', 'DP', 'Greedy', 'Binary Search', 'Math', 'Bit Manipulation', 'Sliding Window', 'Backtracking', 'Recursion', 'Other']; %>
+            <% topics.forEach(t => { %>
+              <option value="<%= t %>" <%= problem.topic === t ? 'selected' : '' %>><%= t %></option>
+            <% }) %>
+          </select>
+        </div>
+        
+        <div class="form-group w-50">
+          <label for="status">Status *</label>
+          <select id="status" name="status" class="form-control" required>
+            <option value="Solved" <%= problem.status === 'Solved' ? 'selected' : '' %>>Solved</option>
+            <option value="Attempted" <%= problem.status === 'Attempted' ? 'selected' : '' %>>Attempted</option>
+            <option value="Revisit" <%= problem.status === 'Revisit' ? 'selected' : '' %>>Needs Revisit</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group w-50">
+          <label for="timeTaken">Time Taken (minutes)</label>
+          <input type="number" id="timeTaken" name="timeTaken" class="form-control" min="0" value="<%= problem.timeTaken %>">
+        </div>
+        
+        <div class="form-group w-50">
+          <label for="dateSolved">Date Solved</label>
+          <input type="date" id="dateSolved" name="dateSolved" class="form-control" value="<%= new Date(problem.dateSolved).toISOString().split('T')[0] %>">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="notes">Personal Notes</label>
+        <textarea id="notes" name="notes" class="form-control" rows="4"><%= problem.notes %></textarea>
+      </div>
+      
+      <button type="submit" class="btn-primary btn-block">Update Problem</button>
+    </form>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>

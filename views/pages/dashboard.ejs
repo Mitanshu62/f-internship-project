@@ -1,0 +1,116 @@
+<%- include('../partials/header') %>
+
+<div class="dashboard-header">
+  <div>
+    <h1 class="page-title">Dashboard</h1>
+    <p class="text-muted"><%= todayDate %></p>
+  </div>
+  <a href="/problems/add" class="btn-primary">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    Quick Add
+  </a>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card glass-card">
+    <div class="stat-icon streak-icon">🔥</div>
+    <div class="stat-info">
+      <h3 class="stat-value"><%= user.currentStreak %> <span style="font-size: 1rem; color: #64748B;">days</span></h3>
+      <p class="stat-label">Current Streak</p>
+    </div>
+  </div>
+  
+  <div class="stat-card glass-card">
+    <div class="stat-icon total-icon">📝</div>
+    <div class="stat-info">
+      <h3 class="stat-value"><%= totalProblems %></h3>
+      <p class="stat-label">Total Solved</p>
+    </div>
+  </div>
+
+  <div class="stat-card glass-card stat-split">
+    <div class="split-item">
+      <span class="difficulty-dot dot-easy"></span>
+      <div>
+        <h4 class="split-value"><%= easyCount %></h4>
+        <p class="split-label">Easy</p>
+      </div>
+    </div>
+    <div class="split-item">
+      <span class="difficulty-dot dot-medium"></span>
+      <div>
+        <h4 class="split-value"><%= mediumCount %></h4>
+        <p class="split-label">Medium</p>
+      </div>
+    </div>
+    <div class="split-item">
+      <span class="difficulty-dot dot-hard"></span>
+      <div>
+        <h4 class="split-value"><%= hardCount %></h4>
+        <p class="split-label">Hard</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="goal-card glass-card mb-4" style="padding: 1.5rem; margin-bottom: 2rem;">
+  <div class="section-header" style="margin-bottom: 0.5rem;">
+    <h2>Daily Goal</h2>
+    <span class="badge badge-topic"><%= user.dailyGoal %> Problems</span>
+  </div>
+  <div class="progress-label mt-2">
+    <span>Completed: <strong><%= todaySolvedCount %> / <%= user.dailyGoal %></strong></span>
+    <span><%= progressPercentage %>%</span>
+  </div>
+  <div class="progress-container mt-2">
+    <div class="progress-bar-bg">
+      <div class="progress-bar fill-primary" style="width: <%= progressPercentage %>%;"></div>
+    </div>
+  </div>
+  <% if (goalCompleted) { %>
+    <div class="goal-success mt-3" style="text-align: center;">
+      <span class="badge badge-easy" style="font-size: 0.9rem; padding: 0.4rem 1rem;">🎉 Congratulations! You completed today's coding goal.</span>
+    </div>
+  <% } %>
+</div>
+
+<div class="dashboard-content">
+  <div class="recent-problems">
+    <div class="section-header">
+      <h2>Recent Problems</h2>
+      <a href="/problems" class="btn-text">View All</a>
+    </div>
+    
+    <% if (recentProblems.length > 0) { %>
+      <div class="problem-list">
+        <% recentProblems.forEach(problem => { %>
+          <a href="/problems/<%= problem._id %>" class="problem-card glass-card">
+            <div class="problem-main">
+              <span class="status-icon <%= problem.status === 'Solved' ? 'status-solved' : (problem.status === 'Attempted' ? 'status-attempted' : 'status-revisit') %>">
+                <% if (problem.status === 'Solved') { %> ✓ <% } else if (problem.status === 'Attempted') { %> ! <% } else { %> ↻ <% } %>
+              </span>
+              <div class="problem-title-box">
+                <h4 class="problem-title"><%= problem.title %></h4>
+                <span class="problem-platform"><%= problem.platform %></span>
+              </div>
+            </div>
+            <div class="problem-meta">
+              <span class="badge badge-<%= problem.difficulty.toLowerCase() %>"><%= problem.difficulty %></span>
+              <span class="badge badge-topic"><%= problem.topic %></span>
+              <span class="problem-date"><%= new Date(problem.dateSolved).toLocaleDateString() %></span>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty-state glass-card">
+        <div class="empty-icon">📭</div>
+        <h3>No problems solved yet</h3>
+        <p>Start your coding journey by adding your first problem.</p>
+        <a href="/problems/add" class="btn-primary mt-3">Add Problem</a>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

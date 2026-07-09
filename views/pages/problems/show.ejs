@@ -1,0 +1,61 @@
+<%- include('../../partials/header') %>
+
+<div class="details-container">
+  <div class="details-card glass-card">
+    <div class="details-header">
+      <div class="title-section">
+        <h1 class="details-title"><%= problem.title %></h1>
+        <div class="details-badges">
+          <span class="badge badge-<%= problem.difficulty.toLowerCase() %>"><%= problem.difficulty %></span>
+          <span class="badge badge-topic"><%= problem.topic %></span>
+          <span class="badge badge-platform"><%= problem.platform %></span>
+          <span class="status-badge <%= problem.status === 'Solved' ? 'status-solved' : (problem.status === 'Attempted' ? 'status-attempted' : 'status-revisit') %>">
+            <%= problem.status %>
+          </span>
+        </div>
+      </div>
+      <div class="details-actions">
+        <a href="/problems/<%= problem._id %>/edit" class="btn-secondary">Edit</a>
+        <form action="/problems/<%= problem._id %>?_method=DELETE" method="POST" class="inline-form" onsubmit="return confirm('Delete this problem?');">
+          <button type="submit" class="btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="details-body">
+      <div class="meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">Date Added</span>
+          <span class="meta-value"><%= new Date(problem.dateSolved).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Time Taken</span>
+          <span class="meta-value"><%= problem.timeTaken ? problem.timeTaken + ' minutes' : 'Not recorded' %></span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Last Updated</span>
+          <span class="meta-value"><%= new Date(problem.updatedAt).toLocaleDateString() %></span>
+        </div>
+      </div>
+      
+      <div class="notes-section mt-4">
+        <h3>Personal Notes</h3>
+        <% if (problem.notes) { %>
+          <div class="notes-content">
+            <p><%= problem.notes %></p>
+          </div>
+        <% } else { %>
+          <div class="notes-content empty-notes">
+            <p class="text-muted">No notes added for this problem.</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+    
+    <div class="details-footer">
+      <a href="/problems" class="btn-text">← Back to Problems</a>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>
