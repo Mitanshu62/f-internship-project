@@ -2,9 +2,11 @@ const User = require('../models/User');
 
 exports.getLogin = (req, res, next) => {
   try {
+    console.log(`[TRACE] Rendering pages/login for /auth/login`);
     res.render('pages/login', { title: 'Login - CodeTrack' });
+    console.log(`[TRACE] Render complete for pages/login`);
   } catch (error) {
-    console.error('Runtime error in getLogin:', error);
+    console.error(`[TRACE] Runtime error in getLogin during render:`, error);
     next(error);
   }
 };
@@ -46,9 +48,11 @@ exports.postLogin = async (req, res, next) => {
 
 exports.getSignup = (req, res, next) => {
   try {
+    console.log(`[TRACE] Rendering pages/signup for /auth/signup`);
     res.render('pages/signup', { title: 'Signup - CodeTrack' });
+    console.log(`[TRACE] Render complete for pages/signup`);
   } catch (error) {
-    console.error('Runtime error in getSignup:', error);
+    console.error(`[TRACE] Runtime error in getSignup during render:`, error);
     next(error);
   }
 };

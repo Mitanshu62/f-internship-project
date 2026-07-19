@@ -3,29 +3,43 @@ const router = express.Router();
 const { forwardAuthenticated } = require('../middlewares/auth');
 const authController = require('../controllers/authController');
 
+// Debugging middleware for auth routes
+router.use((req, res, next) => {
+  console.log(`[TRACE] Entering authRoutes for ${req.method} ${req.path}`);
+  next();
+});
+
+const traceForwardAuth = (req, res, next) => {
+  console.log(`[TRACE] Entering forwardAuthenticated middleware`);
+  forwardAuthenticated(req, res, (err) => {
+    if (err) {
+      console.error(`[TRACE] Error in forwardAuthenticated:`, err);
+      return next(err);
+    }
+    console.log(`[TRACE] Leaving forwardAuthenticated middleware`);
+    next();
+  });
+};
+
 // @route   GET /auth/login
-// @desc    Login page
-// @access  Public
-router.get('/login', forwardAuthenticated, authController.getLogin);
+router.get('/login', traceForwardAuth, (req, res, next) => {
+  console.log(`[TRACE] Entering getLogin controller`);
+  authController.getLogin(req, res, next);
+});
 
 // @route   POST /auth/login
-// @desc    Login handler
-// @access  Public
-router.post('/login', forwardAuthenticated, authController.postLogin);
+router.post('/login', traceForwardAuth, authController.postLogin);
 
 // @route   GET /auth/signup
-// @desc    Signup page
-// @access  Public
-router.get('/signup', forwardAuthenticated, authController.getSignup);
+router.get('/signup', traceForwardAuth, (req, res, next) => {
+  console.log(`[TRACE] Entering getSignup controller`);
+  authController.getSignup(req, res, next);
+});
 
 // @route   POST /auth/signup
-// @desc    Signup handler
-// @access  Public
-router.post('/signup', forwardAuthenticated, authController.postSignup);
+router.post('/signup', traceForwardAuth, authController.postSignup);
 
 // @route   GET /auth/logout
-// @desc    Logout user
-// @access  Private
 router.get('/logout', authController.logout);
 
 module.exports = router;

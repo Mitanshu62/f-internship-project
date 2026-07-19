@@ -1,5 +1,7 @@
 const errorHandler = (err, req, res, next) => {
-  console.error(err.stack);
+  console.error(`[ERROR HANDLER] Path: ${req.path}`);
+  console.error(`[ERROR HANDLER] Message: ${err.message}`);
+  console.error(`[ERROR HANDLER] Stack: ${err.stack}`);
 
   res.status(err.status || 500);
 
@@ -7,7 +9,8 @@ const errorHandler = (err, req, res, next) => {
   if (req.accepts('json') && !req.accepts('html')) {
     return res.json({
       success: false,
-      error: err.message || 'Server Error'
+      error: err.message || 'Server Error',
+      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
     });
   }
 
@@ -16,10 +19,10 @@ const errorHandler = (err, req, res, next) => {
   if (res.locals.error === undefined) res.locals.error = [];
   if (res.locals.success === undefined) res.locals.success = [];
 
-  // Otherwise render the 500 error page
+  // Always show the full error stack in the UI for this debugging audit
   res.render('pages/500', {
-    title: 'Server Error',
-    error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong on our end.'
+    title: '500 Internal Server Error',
+    error: `Message: ${err.message}\n\nPath: ${req.path}\n\nStack:\n${err.stack}`
   });
 };
 
