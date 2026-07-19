@@ -14,9 +14,13 @@ const logger = require('morgan');
 const connectDB = require('./config/db');
 require('./config/env'); // Perform env validation check at startup
 
-// Connect to Database optimistically on startup
-connectDB().catch(err => {
+// Connect to Database optimistically on startup and return the MongoClient for sessions
+const clientPromise = connectDB().then(() => {
+  return mongoose.connection.getClient();
+}).catch(err => {
   console.error('Failed to connect to database on startup:', err.message);
+  // Return undefined on failure so the app doesn't crash completely, 
+  // though sessions relying on DB will fail until DB connects.
 });
 
 const app = express();
@@ -60,7 +64,10 @@ const sessionConfig = {
 };
 
 if (process.env.MONGODB_URI) {
-  sessionConfig.store = MongoStore.create({ mongoUrl: process.env.MONGODB_URI });
+  // Use the resilient connection established by config/db.js
+  sessionConfig.store = MongoStore.create({ 
+    clientPromise: clientPromise 
+  });
 } else {
   console.warn('WARNING: MONGODB_URI is not defined. Sessions will fall back to MemoryStore.');
 }
