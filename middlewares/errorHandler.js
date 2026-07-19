@@ -11,6 +11,11 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
+  // Ensure locals are set so header/footer partials don't throw ReferenceErrors
+  if (res.locals.user === undefined) res.locals.user = null;
+  if (res.locals.error === undefined) res.locals.error = [];
+  if (res.locals.success === undefined) res.locals.success = [];
+
   // Otherwise render the 500 error page
   res.render('pages/500', {
     title: 'Server Error',
