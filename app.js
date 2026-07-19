@@ -12,16 +12,19 @@ const compression = require('compression');
 const logger = require('morgan');
 
 const connectDB = require('./config/db');
+require('./config/env'); // Perform env validation check at startup
 
-// Connect to Database
-connectDB();
+// Connect to Database optimistically on startup
+connectDB().catch(err => {
+  console.error('Failed to connect to database on startup:', err.message);
+});
 
 const app = express();
 
 // Disable x-powered-by header
 app.disable('x-powered-by');
 
-// Trust proxy for Render deployment
+// Trust proxy for Render/Vercel deployment
 app.set('trust proxy', 1);
 
 // Security and Performance Middleware
@@ -39,17 +42,30 @@ app.use(cookieParser());
 // Method override
 app.use(methodOverride('_method'));
 
-// Session store
-app.use(session({
+// Environment and database verification middlewares
+const envCheck = require('./middlewares/envCheck');
+const dbMiddleware = require('./middlewares/dbMiddleware');
+app.use(envCheck);
+app.use(dbMiddleware);
+
+// Session store configuration (resilient to missing database variables)
+const sessionConfig = {
   secret: process.env.SESSION_SECRET || 'secret',
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
   cookie: { 
     maxAge: 1000 * 60 * 60 * 24, // 1 day
     secure: process.env.NODE_ENV === 'production' // secure cookies in production (HTTPS)
   }
-}));
+};
+
+if (process.env.MONGODB_URI) {
+  sessionConfig.store = MongoStore.create({ mongoUrl: process.env.MONGODB_URI });
+} else {
+  console.warn('WARNING: MONGODB_URI is not defined. Sessions will fall back to MemoryStore.');
+}
+
+app.use(session(sessionConfig));
 
 // Flash messages
 app.use(flash());
@@ -86,19 +102,24 @@ app.use((req, res, next) => {
 const errorHandler = require('./middlewares/errorHandler');
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Conditional port listening
+if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
 // Global Process Error Handlers
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  // Application specific logging, throwing an error, or other logic here
 });
 
 process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception thrown:', error);
-  process.exit(1);
+  if (!process.env.VERCEL) {
+    process.exit(1);
+  }
 });
+
+module.exports = app;
