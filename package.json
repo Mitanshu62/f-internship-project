@@ -11,7 +11,13 @@
     "dev": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["coding", "tracker", "leetcode", "dsa", "productivity"],
+  "keywords": [
+    "coding",
+    "tracker",
+    "leetcode",
+    "dsa",
+    "productivity"
+  ],
   "author": "CodeTrack Team",
   "license": "ISC",
   "repository": {
@@ -35,6 +41,7 @@
     "express-session": "^1.19.0",
     "helmet": "^8.2.0",
     "method-override": "^3.0.0",
+    "mongodb": "^7.5.0",
     "mongoose": "^9.7.4",
     "morgan": "^1.11.0"
   }
