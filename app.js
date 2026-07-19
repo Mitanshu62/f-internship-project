@@ -88,9 +88,9 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Global variables for templates
 app.use((req, res, next) => {
-  res.locals.user = req.session.user || null;
-  res.locals.error = req.flash('error');
-  res.locals.success = req.flash('success');
+  res.locals.user = req.session?.user || null;
+  res.locals.error = (req.session && typeof req.flash === 'function') ? req.flash('error') : [];
+  res.locals.success = (req.session && typeof req.flash === 'function') ? req.flash('success') : [];
   next();
 });
 
